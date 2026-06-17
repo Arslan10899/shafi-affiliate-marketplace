@@ -129,10 +129,21 @@
                             <span>Tax:</span>
                             <span>${{ "%.2f"|format(tax) }}</span>
                         </div>
+                        {% if discount > 0 %}
+                        <div class="summary-row" style="color:#10b981">
+                            <span>Coupon Discount ({{ discount_percent }}%):</span>
+                            <span>-${{ "%.2f"|format(discount) }}</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Order total:</span>
+                            <span>${{ "%.2f"|format(total - discount) }}</span>
+                        </div>
+                        {% else %}
                         <div class="summary-row total">
                             <span>Order total:</span>
                             <span>${{ "%.2f"|format(total) }}</span>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -157,6 +168,7 @@ $(document).ready(function() {
             success: function(res) {
                 if (res.valid) {
                     alert(res.message);
+                    location.reload();
                 } else {
                     alert(res.message);
                 }

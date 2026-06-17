@@ -39,7 +39,7 @@
           <div class="m-summary-box mb-4">
             <h3><i class="las la-tag"></i> Coupon Code</h3>
             <div class="d-flex gap-2">
-              <input type="text" name="coupon_code" class="m-input" placeholder="Enter code" value="{{ request.form.get('coupon_code', '') }}">
+              <input type="text" name="coupon_code" class="m-input" placeholder="Enter code" value="{{ validated_coupon or request.form.get('coupon_code', '') }}">
               <button type="button" class="m-btn m-btn-outline" id="applyCoupon">Apply</button>
             </div>
           </div>
@@ -62,7 +62,12 @@
             <div class="m-summary-row"><span>Subtotal</span><span>${{ "%.2f"|format(subtotal) }}</span></div>
             <div class="m-summary-row"><span>Shipping</span><span>{% if shipping == 0 %}<span style="color:#10b981">FREE</span>{% else %}${{ "%.2f"|format(shipping) }}{% endif %}</span></div>
             <div class="m-summary-row"><span>Tax</span><span>${{ "%.2f"|format(tax) }}</span></div>
+            {% if discount > 0 %}
+            <div class="m-summary-row" style="color:#10b981"><span>Coupon ({{ discount_percent }}% off)</span><span>-${{ "%.2f"|format(discount) }}</span></div>
+            <div class="m-summary-row m-total"><span>Total</span><span>${{ "%.2f"|format(grand - discount) }}</span></div>
+            {% else %}
             <div class="m-summary-row m-total"><span>Total</span><span>${{ "%.2f"|format(grand) }}</span></div>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -79,6 +84,7 @@ document.getElementById('applyCoupon')?.addEventListener('click', function() {
     body: JSON.stringify({code:code, subtotal:{{ total|default(0) }}})
   }).then(function(r){return r.json()}).then(function(d){alert(d.message);if(d.valid)location.reload()})
   .catch(function(){alert('Error');});
+  // Note: page reloads so server re-renders with discount — kept for modern theme
 });
 </script>
 {% endblock %}

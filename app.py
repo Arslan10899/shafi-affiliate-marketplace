@@ -599,6 +599,7 @@ def validate_coupon():
 
 @app.route('/checkout', methods=['GET', 'POST'])
 @login_required
+@csrf.exempt
 def checkout():
     cart_items = Cart.query.filter_by(user_id=session['user_id']).all()
     if not cart_items:
@@ -658,9 +659,17 @@ def checkout():
         db.session.commit()
         return redirect(url_for('payment', oid=order.id))
 
-    validated_coupon = session.pop('validated_coupon', None)
+    validated_coupon = session.get('validated_coupon')
+    discount = 0
+    discount_percent = 0
+    if validated_coupon:
+        coupon = Coupon.query.filter_by(code=validated_coupon, is_active=True).first()
+        if coupon and not (coupon.expiry_date and coupon.expiry_date < datetime.utcnow()) and coupon.current_uses < coupon.max_uses:
+            discount_percent = coupon.discount_percent
+            discount = round(subtotal * discount_percent / 100, 2)
     return render_template('checkout.html', cart_items=cart_items,
-        subtotal=subtotal, tax=tax, shipping=shipping, total=total, validated_coupon=validated_coupon)
+        subtotal=subtotal, tax=tax, shipping=shipping, total=total,
+        validated_coupon=validated_coupon, discount=discount, discount_percent=discount_percent)
 
 # ====== PAYMENT ======
 @app.route('/payment/<int:oid>', methods=['GET', 'POST'])
