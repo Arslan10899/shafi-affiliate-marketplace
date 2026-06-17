@@ -236,6 +236,11 @@ with app.app_context():
     db.create_all()
     migrate_db()
     migrate_passwords()
+    if not User.query.filter_by(username='admin').first():
+        admin = User(username='admin', email='admin@admin.com',
+            password=generate_password_hash('admin123'), is_admin=True, role='Admin')
+        db.session.add(admin)
+        db.session.commit()
 
 # ====== HELPERS ======
 def login_required(f):
