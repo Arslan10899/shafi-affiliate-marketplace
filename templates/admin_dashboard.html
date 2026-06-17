@@ -84,17 +84,23 @@
 				</div>
 				<ul class="nav">
 					<li class="nav-item active"><a href="{{ url_for('admin_dashboard') }}"><i class="la la-shield"></i><p>Admin Dashboard</p></a></li>
-					<li class="nav-item"><a href="{{ url_for('admin_users') }}"><i class="la la-users"></i><p>Manage Users</p></a></li>
+					<li style="padding:8px 20px 4px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">Manage Store</li>
 					<li class="nav-item"><a href="{{ url_for('admin_products') }}"><i class="la la-cube"></i><p>Manage Products</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_categories') }}"><i class="la la-tags"></i><p>Categories</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_subcategories') }}"><i class="la la-list"></i><p>Subcategories</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_orders') }}"><i class="la la-shopping-cart"></i><p>Orders</p></a></li>
-					<li class="nav-item"><a href="{{ url_for('admin_customers') }}"><i class="la la-user"></i><p>Customers</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_inventory') }}"><i class="la la-archive"></i><p>Inventory</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_coupons') }}"><i class="la la-gift"></i><p>Coupons</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_reviews') }}"><i class="la la-star"></i><p>Reviews</p></a></li>
+					<li style="padding:8px 20px 4px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">Blog</li>
+					<li class="nav-item"><a href="{{ url_for('admin_blog') }}"><i class="la la-edit"></i><p>Blog Posts</p></a></li>
+					<li class="nav-item"><a href="{{ url_for('admin_blog_comments') }}"><i class="la la-comments"></i><p>Blog Comments</p></a></li>
+					<li class="nav-item"><a href="{{ url_for('admin_blog_ratings') }}"><i class="la la-star"></i><p>Blog Ratings</p></a></li>
+					<li style="padding:8px 20px 4px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">Users</li>
+					<li class="nav-item"><a href="{{ url_for('admin_users') }}"><i class="la la-users"></i><p>Manage Users</p></a></li>
+					<li class="nav-item"><a href="{{ url_for('admin_customers') }}"><i class="la la-user"></i><p>Customers</p></a></li>
+					<li style="padding:8px 20px 4px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">Other</li>
 					<li class="nav-item"><a href="{{ url_for('admin_contacts') }}"><i class="la la-envelope"></i><p>Contacts</p></a></li>
-					<li class="nav-item"><a href="{{ url_for('admin_blog') }}"><i class="la la-edit"></i><p>Blog</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_reports') }}"><i class="la la-bar-chart"></i><p>Reports</p></a></li>
 				</ul>
 			</div>
@@ -209,7 +215,38 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-12">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title"><i class="las la-edit" style="color:var(--accent)"></i> Blog Overview</h4>
+								</div>
+								<div class="card-body">
+									<div class="row text-center">
+										<div class="col-4">
+											<h3 class="fw-bold" style="color:#3b82f6">{{ total_blog_posts }}</h3>
+											<small class="text-muted">Total Posts</small>
+										</div>
+										<div class="col-4">
+											<h3 class="fw-bold" style="color:#10b981">{{ total_blog_comments }}</h3>
+											<small class="text-muted">Comments</small>
+										</div>
+										<div class="col-4">
+											<h3 class="fw-bold" style="color:#f59e0b">{{ total_blog_ratings }}</h3>
+											<small class="text-muted">Ratings</small>
+										</div>
+									</div>
+									<hr>
+									<div class="d-flex justify-content-between align-items-center">
+										<span>Pending Comments: <strong>{{ pending_comments }}</strong></span>
+										<div>
+											<a href="{{ url_for('admin_blog') }}" class="btn btn-sm btn-primary">Manage Posts</a>
+											<a href="{{ url_for('admin_blog_comments') }}" class="btn btn-sm btn-outline-primary">Comments</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
 							<div class="card">
 								<div class="card-header">
 									<h4 class="card-title">Recent Users</h4>

@@ -63,8 +63,12 @@
 					<li class="nav-item"><a href="{{ url_for('admin_inventory') }}"><i class="la la-archive"></i><p>Inventory</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_coupons') }}"><i class="la la-gift"></i><p>Coupons</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_reviews') }}"><i class="la la-star"></i><p>Reviews</p></a></li>
+					<li style="padding:8px 20px 4px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">Blog</li>
+					<li class="nav-item active"><a href="{{ url_for('admin_blog') }}"><i class="la la-edit"></i><p>Blog Posts</p></a></li>
+					<li class="nav-item"><a href="{{ url_for('admin_blog_comments') }}"><i class="la la-comments"></i><p>Blog Comments</p></a></li>
+					<li class="nav-item"><a href="{{ url_for('admin_blog_ratings') }}"><i class="la la-star"></i><p>Blog Ratings</p></a></li>
+					<li style="padding:8px 20px 4px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">Other</li>
 					<li class="nav-item"><a href="{{ url_for('admin_contacts') }}"><i class="la la-envelope"></i><p>Contacts</p></a></li>
-					<li class="nav-item active"><a href="{{ url_for('admin_blog') }}"><i class="la la-edit"></i><p>Blog</p></a></li>
 					<li class="nav-item"><a href="{{ url_for('admin_reports') }}"><i class="la la-bar-chart"></i><p>Reports</p></a></li>
 				</ul>
 			</div>
@@ -81,7 +85,7 @@
 									<h4 class="card-title">New Post</h4>
 								</div>
 								<div class="card-body">
-									<form method="POST" action="{{ url_for('admin_add_blog') }}">
+									<form method="POST" action="{{ url_for('admin_add_blog') }}" enctype="multipart/form-data">
 										<div class="mb-3">
 											<label class="form-label fw-semibold">Title</label>
 											<input type="text" class="form-control" name="title" required placeholder="Enter post title">
@@ -96,8 +100,10 @@
 												<input type="text" class="form-control" name="author" value="Admin">
 											</div>
 											<div class="col-md-6">
-												<label class="form-label fw-semibold">Image URL</label>
-												<input type="text" class="form-control" name="image" placeholder="https://example.com/image.jpg">
+												<label class="form-label fw-semibold">Featured Image</label>
+												<input type="file" class="form-control" name="image_file" accept="image/*">
+												<small class="text-muted">Upload an image or enter URL below</small>
+												<input type="text" class="form-control mt-2" name="image" placeholder="Or paste image URL here">
 											</div>
 										</div>
 										<div class="d-flex gap-2">

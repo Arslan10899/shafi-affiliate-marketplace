@@ -892,12 +892,20 @@ def admin_dashboard():
     for s in statuses:
         status_counts.append(Order.query.filter_by(status=s).count())
 
+    # Blog stats
+    total_blog_posts = Blog.query.count()
+    total_blog_comments = BlogComment.query.count()
+    total_blog_ratings = BlogRating.query.count()
+    pending_comments = BlogComment.query.filter_by(is_approved=False).count()
+
     return render_template('admin_dashboard.html',
         user=current_user, total_users=total_users, total_products=total_products,
         total_orders=total_orders, total_revenue=total_revenue,
         recent_orders=recent_orders, recent_users=recent_users,
         rev_labels=rev_labels, rev_data=rev_data,
-        statuses=statuses, status_counts=status_counts, status_colors=status_colors)
+        statuses=statuses, status_counts=status_counts, status_colors=status_colors,
+        total_blog_posts=total_blog_posts, total_blog_comments=total_blog_comments,
+        total_blog_ratings=total_blog_ratings, pending_comments=pending_comments)
 
 @app.route('/admin/users')
 @admin_required
@@ -1417,11 +1425,21 @@ def admin_blog():
 def admin_add_blog():
     current_user = User.query.get(session['user_id'])
     if request.method == 'POST':
+        image_url = request.form.get('image', '')
+        file = request.files.get('image_file')
+        if file and file.filename and allowed_file(file.filename):
+            filename = f"blog_{random.randint(10000,99999)}_{file.filename}"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image = url_for('static', filename=f'uploads/{filename}')
+        elif image_url:
+            image = image_url
+        else:
+            image = ''
         post = Blog(
             title=request.form['title'],
             content=request.form['content'],
             author=request.form.get('author', 'Admin'),
-            image=request.form.get('image', ''),
+            image=image,
             created_at=datetime.utcnow()
         )
         db.session.add(post)
@@ -1439,7 +1457,14 @@ def admin_edit_blog(bid):
         post.title = request.form['title']
         post.content = request.form['content']
         post.author = request.form.get('author', post.author)
-        post.image = request.form.get('image', post.image)
+        image_url = request.form.get('image', '')
+        file = request.files.get('image_file')
+        if file and file.filename and allowed_file(file.filename):
+            filename = f"blog_{random.randint(10000,99999)}_{file.filename}"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            post.image = url_for('static', filename=f'uploads/{filename}')
+        elif image_url:
+            post.image = image_url
         db.session.commit()
         flash('Blog post updated!', 'success')
         return redirect(url_for('admin_blog'))
@@ -1501,6 +1526,22 @@ def admin_delete_blog_comment(cid):
     db.session.commit()
     flash('Comment deleted!', 'danger')
     return redirect(url_for('admin_blog_comments'))
+
+@app.route('/admin/blog/ratings')
+@admin_required
+def admin_blog_ratings():
+    current_user = User.query.get(session['user_id'])
+    ratings = BlogRating.query.order_by(BlogRating.id.desc()).all()
+    return render_template('admin_blog_ratings.html', ratings=ratings, user=current_user)
+
+@app.route('/admin/blog/rating/delete/<int:rid>')
+@admin_required
+def admin_delete_blog_rating(rid):
+    r = BlogRating.query.get_or_404(rid)
+    db.session.delete(r)
+    db.session.commit()
+    flash('Rating deleted!', 'danger')
+    return redirect(url_for('admin_blog_ratings'))
 
 # ====== SEED DATA ======
 def seed_data():
