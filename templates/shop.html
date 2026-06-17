@@ -44,10 +44,6 @@
         .pc-price-frac { font-size: 13px; font-weight: 700; color: #0f172a; vertical-align: super; }
         .pc-old { font-size: 13px; color: #94a3b8; text-decoration: line-through; }
         .pc-discount-tag { font-size: 11px; font-weight: 600; color: #10b981; background: #ecfdf5; padding: 2px 8px; border-radius: 4px; }
-        .pc-colors { display: flex; gap: 5px; margin: 6px 0 10px; }
-        .pc-color-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #e2e8f0; cursor: pointer; transition: transform .2s; }
-        .pc-color-dot:hover { transform: scale(1.2); }
-        .pc-color-dot.active { border-color: #0f172a; }
         .pc-footer { display: flex; gap: 8px; margin-top: auto; }
         .pc-add-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; background: #0f172a; color: #fff; transition: all .25s; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .pc-add-btn:hover { background: #3b82f6; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,.3); }
@@ -73,7 +69,6 @@
             .pc-name { font-size: 13px; }
             .pc-price { font-size: 17px; }
             .pc-add-btn { font-size: 12px; padding: 8px; }
-            .pc-colors { display: none; }
         }
     </style>
 
@@ -188,11 +183,6 @@
                                     <span class="pc-price">${{ "%.0f"|format(product.price) }}<span class="pc-price-frac">.{{ frac }}</span></span>
                                     {% if product.old_price %}<span class="pc-old">${{ "%.2f"|format(product.old_price) }}</span>{% endif %}
                                     {% if product.discount > 0 %}<span class="pc-discount-tag">{{ product.discount }}% OFF</span>{% endif %}
-                                </div>
-                                <div class="pc-colors">
-                                    {% for c in ['#1e293b','#ef4444','#3b82f6','#10b981'] %}
-                                    <span class="pc-color-dot{% if loop.first %} active{% endif %}" style="background:{{ c }}"></span>
-                                    {% endfor %}
                                 </div>
                                 <div class="pc-footer">
                                     <button class="pc-add-btn add-cart" data-pid="{{ product.id }}"><i class="las la-shopping-bag"></i> Add</button>
