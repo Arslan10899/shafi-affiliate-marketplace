@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - ShopName</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+{% from 'includes/breadcrumb.html' import breadcrumb %}
+{{ breadcrumb([{'name': 'FAQ', 'url': '#'}]) }}
+
+    <main>
+        <section class="bg-primary py-5">
+            <div class="container text-center text-white">
+                <h1 class="fw-bold">Frequently Asked Questions</h1>
+                <p class="lead mb-0">Find answers to common questions below</p>
+            </div>
+        </section>
+
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+
+                        <h2 class="fw-bold mb-4">
+                            <i class="fas fa-shopping-cart text-primary me-2"></i> Orders
+                        </h2>
+                        <div id="accordionOrders" class="mb-5">
+                            <div class="card mb-2">
+                                <div class="card-header" id="orderHeading1">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold" data-bs-toggle="collapse" data-bs-target="#orderCollapse1" aria-expanded="true">
+                                            How do I place an order?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="orderCollapse1" class="collapse show" data-parent="#accordionOrders">
+                                    <div class="card-body">
+                                        Simply browse our catalog, add items to your cart, and proceed to checkout. You will need to provide your shipping details and choose a payment method to complete the purchase.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-header" id="orderHeading2">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#orderCollapse2">
+                                            Can I modify or cancel my order after placing it?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="orderCollapse2" class="collapse" data-parent="#accordionOrders">
+                                    <div class="card-body">
+                                        Orders can be modified or canceled within 30 minutes of placement. Please contact our support team as soon as possible with your order number.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-header" id="orderHeading3">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#orderCollapse3">
+                                            How will I know when my order is confirmed?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="orderCollapse3" class="collapse" data-parent="#accordionOrders">
+                                    <div class="card-body">
+                                        You will receive an order confirmation email with your order number and details shortly after placing your order. You can also check your order status in your account dashboard.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="fw-bold mb-4">
+                            <i class="fas fa-credit-card text-primary me-2"></i> Payments
+                        </h2>
+                        <div id="accordionPayments" class="mb-5">
+                            <div class="card mb-2">
+                                <div class="card-header" id="paymentHeading1">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#paymentCollapse1">
+                                            What payment methods do you accept?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="paymentCollapse1" class="collapse" data-parent="#accordionPayments">
+                                    <div class="card-body">
+                                        We accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay. All transactions are processed securely.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-header" id="paymentHeading2">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#paymentCollapse2">
+                                            Is my payment information secure?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="paymentCollapse2" class="collapse" data-parent="#accordionPayments">
+                                    <div class="card-body">
+                                        Yes, we use industry-standard SSL encryption to protect your payment information. Your payment details are never stored on our servers.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-header" id="paymentHeading3">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#paymentCollapse3">
+                                            When will my card be charged?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="paymentCollapse3" class="collapse" data-parent="#accordionPayments">
+                                    <div class="card-body">
+                                        Your card will be charged immediately upon placing the order. If the order is canceled, a refund will be processed within 5-7 business days.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="fw-bold mb-4">
+                            <i class="fas fa-truck text-primary me-2"></i> Shipping
+                        </h2>
+                        <div id="accordionShipping" class="mb-5">
+                            <div class="card mb-2">
+                                <div class="card-header" id="shipHeading1">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#shipCollapse1">
+                                            How long does shipping take?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="shipCollapse1" class="collapse" data-parent="#accordionShipping">
+                                    <div class="card-body">
+                                        Standard shipping takes 5-7 business days. Express shipping takes 2-3 business days. International shipping may take 10-15 business days depending on the destination.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-header" id="shipHeading2">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#shipCollapse2">
+                                            Do you offer free shipping?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="shipCollapse2" class="collapse" data-parent="#accordionShipping">
+                                    <div class="card-body">
+                                        Yes, we offer free standard shipping on all orders over $50. Free express shipping is available on orders over $100.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="fw-bold mb-4">
+                            <i class="fas fa-undo text-primary me-2"></i> Returns
+                        </h2>
+                        <div id="accordionReturns" class="mb-5">
+                            <div class="card mb-2">
+                                <div class="card-header" id="returnHeading1">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#returnCollapse1">
+                                            What is your return policy?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="returnCollapse1" class="collapse" data-parent="#accordionReturns">
+                                    <div class="card-body">
+                                        We offer a 30-day return policy for most items. Products must be unused and in their original packaging. Some exceptions apply for perishable goods and personalized items.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-header" id="returnHeading2">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link text-dark fw-bold collapsed" data-bs-toggle="collapse" data-bs-target="#returnCollapse2">
+                                            How long do refunds take?
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="returnCollapse2" class="collapse" data-parent="#accordionReturns">
+                                    <div class="card-body">
+                                        Once we receive your return, refunds are processed within 5-7 business days. The amount will be credited to your original payment method.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+/* Admin-specific overrides (layout is in theme.css) */
+.scrollbar-inner { overflow-y: auto; }
+
+/* Quick stats customization */
+.stat-icon-sm { width: 36px; height: 36px; font-size: 1rem; }
+
+/* Table responsive fixes */
+.table-responsive { border-radius: var(--radius-sm); }
+
+/* Custom file input styling */
+.custom-file { position: relative; display: inline-block; width: 100%; }
+.custom-file-input { position: relative; z-index: 2; width: 100%; height: calc(1.5em + .75rem + 2px); margin: 0; opacity: 0; }
+.custom-file-label {
+  position: absolute; top: 0; right: 0; left: 0; z-index: 1;
+  height: calc(1.5em + .75rem + 2px); padding: .375rem .75rem;
+  font-weight: 400; line-height: 1.5; color: var(--text-secondary);
+  background: #fff; border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-xs);
+}
+.custom-file-label::after {
+  position: absolute; top: 0; right: 0; bottom: 0; z-index: 3;
+  display: block; height: calc(1.5em + .75rem); padding: .375rem .75rem;
+  line-height: 1.5; color: #fff; content: "Browse";
+  background: var(--primary); border-left: inherit;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+}
+
+/* Badge defaults for admin */
+.bg-default { background: #e2e8f0 !important; color: #475569 !important; }

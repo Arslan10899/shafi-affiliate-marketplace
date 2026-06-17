@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions - ShopName</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+{% from 'includes/breadcrumb.html' import breadcrumb %}
+{{ breadcrumb([{'name': 'Terms & Conditions', 'url': '#'}]) }}
+
+    <main>
+        <section class="bg-primary py-5">
+            <div class="container text-center text-white">
+                <h1 class="fw-bold">Terms & Conditions</h1>
+                <p class="lead mb-0">Please read these terms carefully</p>
+            </div>
+        </section>
+
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <p class="text-muted">Last updated: January 1, 2026</p>
+
+                        <p>Welcome to ShopName. By accessing or using our website, you agree to be bound by these Terms & Conditions. If you do not agree with any part of these terms, please do not use our services.</p>
+
+                        <h3 class="fw-bold mt-4">
+                            <i class="fas fa-user text-primary me-2"></i> User Responsibilities
+                        </h3>
+                        <p>As a user of our website, you agree to:</p>
+                        <ul>
+                            <li>Provide accurate, current, and complete information when creating an account or placing an order.</li>
+                            <li>Maintain the confidentiality of your account credentials and notify us immediately of any unauthorized use.</li>
+                            <li>Use the website only for lawful purposes and in accordance with these terms.</li>
+                            <li>Not engage in any activity that disrupts or interferes with the website's functionality.</li>
+                            <li>Not attempt to gain unauthorized access to any part of the website or its systems.</li>
+                        </ul>
+
+                        <h3 class="fw-bold mt-4">
+                            <i class="fas fa-shopping-bag text-primary me-2"></i> Purchase Rules
+                        </h3>
+                        <p>When making a purchase on our website, the following rules apply:</p>
+                        <ul>
+                            <li>All prices are listed in USD and are subject to change without prior notice.</li>
+                            <li>We reserve the right to refuse or cancel any order for reasons including product availability, pricing errors, or suspected fraud.</li>
+                            <li>Product images are for illustration purposes only. Actual products may vary slightly.</li>
+                            <li>Promotional codes and discounts cannot be combined unless explicitly stated.</li>
+                            <li>You are responsible for providing accurate shipping information. We are not liable for deliveries to incorrect addresses provided by you.</li>
+                        </ul>
+
+                        <h3 class="fw-bold mt-4">
+                            <i class="fas fa-undo text-primary me-2"></i> Refund Terms
+                        </h3>
+                        <p>Our refund policy is governed by the following terms:</p>
+                        <ul>
+                            <li>Returns are accepted within 30 days of delivery as outlined in our Returns & Refunds policy.</li>
+                            <li>Refunds are processed to the original payment method within 5-7 business days after we receive and inspect the returned item.</li>
+                            <li>Shipping costs are non-refundable unless the return is due to our error or a defective product.</li>
+                            <li>We reserve the right to deny a refund if the returned item does not meet our eligibility conditions.</li>
+                        </ul>
+
+                        <h3 class="fw-bold mt-4">
+                            <i class="fas fa-copyright text-primary me-2"></i> Intellectual Property
+                        </h3>
+                        <p>All content on this website, including text, images, logos, and designs, is the property of ShopName and is protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our express written consent.</p>
+
+                        <h3 class="fw-bold mt-4">
+                            <i class="fas fa-ban text-primary me-2"></i> Limitation of Liability
+                        </h3>
+                        <p>ShopName shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the website or purchase of products. Our total liability shall not exceed the amount paid by you for the product in question.</p>
+
+                        <h3 class="fw-bold mt-4">
+                            <i class="fas fa-gavel text-primary me-2"></i> Governing Law
+                        </h3>
+                        <p>These terms shall be governed by and construed in accordance with the laws of the State of New York. Any disputes arising under these terms shall be subject to the exclusive jurisdiction of the courts in New York County.</p>
+
+                        <h3 class="fw-bold mt-4">
+                            <i class="fas fa-envelope text-primary me-2"></i> Contact
+                        </h3>
+                        <p>For questions about these Terms & Conditions, please contact us at <strong>legal@shopname.com</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

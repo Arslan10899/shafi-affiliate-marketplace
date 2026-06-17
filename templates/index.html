@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shafi's Shop - Your Online Shopping Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <!-- ====== HERO ====== -->
+    <section class="cl-hero">
+        <div id="clHeroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="cl-hero-slide" style="background-image: url('{{ url_for("static", filename="uploads/slider_1.jpg") }}');">
+                        <div class="cl-container" style="width:100%">
+                            <div class="cl-hero-content">
+                                <div class="sub">Summer Collection</div>
+                                <h1>Up to 50% Off <br>Trending Styles</h1>
+                                <p>Discover the latest fashion, electronics & home essentials at unbeatable prices. Free shipping on orders over $50.</p>
+                                <a href="{{ url_for('shop') }}" class="cl-btn cl-btn-primary">Shop Now <i class="las la-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="cl-hero-slide" style="background-image: url('{{ url_for("static", filename="uploads/slider_2.jpg") }}');">
+                        <div class="cl-container" style="width:100%">
+                            <div class="cl-hero-content">
+                                <div class="sub">New Arrivals</div>
+                                <h1>Next-Gen <br>Electronics</h1>
+                                <p>Be the first to own the latest gadgets. Premium quality, exclusive deals, and fast delivery guaranteed.</p>
+                                <a href="{{ url_for('shop', sort='newest') }}" class="cl-btn cl-btn-primary">Explore Now <i class="las la-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="cl-hero-slide" style="background-image: url('{{ url_for("static", filename="uploads/slider_3.jpg") }}');">
+                        <div class="cl-container" style="width:100%">
+                            <div class="cl-hero-content">
+                                <div class="sub">Flash Sale</div>
+                                <h1>Extra 20% Off <br>Limited Time</h1>
+                                <p>Hurry! Grab the hottest deals on home & kitchen, fashion accessories, and more before they're gone.</p>
+                                <a href="{{ url_for('shop') }}" class="cl-btn cl-btn-primary">Shop Deals <i class="las la-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#clHeroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#clHeroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- ====== CATEGORIES ====== -->
+    <section class="cl-section">
+        <div class="cl-container">
+            <div class="cl-section-head">
+                <div class="tag">Categories</div>
+                <h2>Shop by Category</h2>
+            </div>
+            <div class="cl-cat-carousel">
+                <button class="cl-cat-arrow cl-cat-arrow-left" type="button" aria-label="Previous"><i class="las la-chevron-left"></i></button>
+                <div class="cl-cat-grid">
+                    {% for cat in categories %}
+                    <a href="{{ url_for('shop', category=cat.id) }}" class="cl-cat-circle">
+                        <span class="cl-cat-img" style="background-image: url('{{ cat.image or url_for('static', filename='img/default-cat.png') }}');"></span>
+                        <span class="cl-cat-name">{{ cat.name }}</span>
+                        <span class="cl-cat-shop">Shop Now <i class="las la-arrow-right"></i></span>
+                    </a>
+                    {% endfor %}
+                </div>
+                <button class="cl-cat-arrow cl-cat-arrow-right" type="button" aria-label="Next"><i class="las la-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FEATURED PRODUCTS ====== -->
+    {% if featured %}
+    <section class="cl-section cl-section-alt">
+        <div class="cl-container">
+            <div class="cl-section-head">
+                <div class="tag">Featured</div>
+                <h2>Featured Products</h2>
+                <p>Handpicked just for you — our most popular items this season</p>
+            </div>
+            <div class="cl-product-grid">
+                {% for product in featured[:8] %}
+                <a href="{{ url_for('product_detail', pid=product.id) }}" class="cl-product-card">
+                    <div class="cl-product-img">
+                        {% if product.discount > 0 %}<span class="cl-product-badge sale">-{{ product.discount }}%</span>{% endif %}
+                        <img src="{{ product.image }}" alt="{{ product.name }}">
+                    </div>
+                    <div class="cl-product-body">
+                        <div class="cl-product-cat">{{ product.category.name }}</div>
+                        <div class="cl-product-name">{{ product.name }}</div>
+                        <div class="cl-product-rating">
+                            <span class="cl-stars"><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star-half-alt"></i></span>
+                            <span class="cl-rating-count">({{ range(10, 100) | random if False else 42 }})</span>
+                        </div>
+                        <div class="cl-product-price">
+                            ${{ "%.2f"|format(product.price) }}
+                            {% if product.old_price %}<span class="old">${{ "%.2f"|format(product.old_price) }}</span>{% endif %}
+                        </div>
+                        <button class="cl-product-add add-cart" data-pid="{{ product.id }}">Add to Cart</button>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- ====== BANNER ====== -->
+    <section class="cl-section">
+        <div class="cl-container">
+            <div class="cl-banner">
+                <div class="cl-banner-content">
+                    <div class="tag">Limited Offer</div>
+                    <h2>Summer Sale Up to 50% Off</h2>
+                    <p>Don't miss our biggest sale of the season. Exclusive discounts on top brands with free delivery nationwide.</p>
+                    <a href="{{ url_for('shop') }}" class="cl-btn cl-btn-primary">Shop Sale <i class="las la-arrow-right"></i></a>
+                </div>
+                <div class="cl-banner-img">
+                    <img src="{{ url_for('static', filename='uploads/product_1.jpg') }}" alt="Summer Sale">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== NEW ARRIVALS ====== -->
+    {% if new_arrivals %}
+    <section class="cl-section cl-section-alt">
+        <div class="cl-container">
+            <div class="cl-section-head">
+                <div class="tag">New</div>
+                <h2>New Arrivals</h2>
+                <p>Fresh drops to keep your style ahead of the curve</p>
+            </div>
+            <div class="cl-product-grid">
+                {% for product in new_arrivals[:8] %}
+                <a href="{{ url_for('product_detail', pid=product.id) }}" class="cl-product-card">
+                    <div class="cl-product-img">
+                        <span class="cl-product-badge new">New</span>
+                        <img src="{{ product.image }}" alt="{{ product.name }}">
+                    </div>
+                    <div class="cl-product-body">
+                        <div class="cl-product-cat">{{ product.category.name }}</div>
+                        <div class="cl-product-name">{{ product.name }}</div>
+                        <div class="cl-product-rating">
+                            <span class="cl-stars"><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i></span>
+                            <span class="cl-rating-count">({{ range(5, 50) | random if False else 18 }})</span>
+                        </div>
+                        <div class="cl-product-price">${{ "%.2f"|format(product.price) }}</div>
+                        <button class="cl-product-add add-cart" data-pid="{{ product.id }}">Add to Cart</button>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- ====== SERVICE FEATURES ====== -->
+    <section class="cl-section">
+        <div class="cl-container">
+            <div class="cl-features">
+                <div class="cl-feature">
+                    <div class="icon" style="background:#fef3c7;color:#d97706"><i class="las la-truck"></i></div>
+                    <h4>Free Shipping</h4>
+                    <p>On orders over $50</p>
+                </div>
+                <div class="cl-feature">
+                    <div class="icon" style="background:#dbeafe;color:#2563eb"><i class="las la-redo"></i></div>
+                    <h4>Easy Returns</h4>
+                    <p>30-day return policy</p>
+                </div>
+                <div class="cl-feature">
+                    <div class="icon" style="background:#dcfce7;color:#16a34a"><i class="las la-headset"></i></div>
+                    <h4>24/7 Support</h4>
+                    <p>Dedicated help team</p>
+                </div>
+                <div class="cl-feature">
+                    <div class="icon" style="background:#fce7f3;color:#e11d48"><i class="las la-lock"></i></div>
+                    <h4>Secure Payment</h4>
+                    <p>100% secure checkout</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== NEWSLETTER ====== -->
+    <section class="cl-section">
+        <div class="cl-container">
+            <div class="cl-newsletter">
+                <h2>Stay in the Loop</h2>
+                <p>Subscribe to get exclusive deals, new arrivals, and insider-only offers straight to your inbox.</p>
+                <form class="cl-newsletter-form" onsubmit="return false">
+                    <input type="email" placeholder="Enter your email address">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    {% include 'includes/footer.html' %}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    <script>
+    $(document).ready(function() {
+        $('.add-cart').click(function(e) {
+            e.preventDefault();
+            var pid = $(this).data('pid');
+            $.post('/cart/add/' + pid, function(res) {
+                if (res.success) $('.cart-count').text(res.cart_count || res.count);
+            }).fail(function() { alert('Please login first!'); });
+        });
+        function initCategoryCarousel(wrapper) {
+            var grid = wrapper.querySelector('.cl-cat-grid, .m-cat-grid');
+            var left = wrapper.querySelector('.cl-cat-arrow-left, .m-cat-arrow-left');
+            var right = wrapper.querySelector('.cl-cat-arrow-right, .m-cat-arrow-right');
+            if (!grid || !left || !right) return;
+            function updateArrows() {
+                left.style.display = grid.scrollLeft > 5 ? 'flex' : 'none';
+                right.style.display = grid.scrollLeft < grid.scrollWidth - grid.clientWidth - 5 ? 'flex' : 'none';
+            }
+            left.addEventListener('click', function() {
+                var item = grid.querySelector('.cl-cat-circle, .m-cat-circle');
+                var scrollAmt = item ? item.offsetWidth + 20 : 220;
+                grid.scrollBy({ left: -scrollAmt, behavior: 'smooth' });
+                setTimeout(updateArrows, 350);
+            });
+            right.addEventListener('click', function() {
+                var item = grid.querySelector('.cl-cat-circle, .m-cat-circle');
+                var scrollAmt = item ? item.offsetWidth + 20 : 220;
+                grid.scrollBy({ left: scrollAmt, behavior: 'smooth' });
+                setTimeout(updateArrows, 350);
+            });
+            grid.addEventListener('scroll', updateArrows);
+            updateArrows();
+        }
+        document.querySelectorAll('.cl-cat-carousel, .m-cat-carousel').forEach(initCategoryCarousel);
+    });
+    </script>
+</body>
+</html>

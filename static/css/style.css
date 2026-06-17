@@ -1,0 +1,16 @@
+/* Amazon-style utility styles */
+body {
+  font-family: 'Amazon Ember', Arial, sans-serif;
+}
+.btn-close:focus {
+  box-shadow: none;
+}
+.modal-backdrop.show {
+  opacity: .5;
+}
+/* Line Awesome fallback */
+.la, .las, .lar, .lab {
+  display: inline-block;
+  font-size: inherit;
+  line-height: inherit;
+}
