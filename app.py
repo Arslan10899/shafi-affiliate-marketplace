@@ -594,6 +594,7 @@ def validate_coupon():
     if coupon.current_uses >= coupon.max_uses:
         return jsonify({'valid': False, 'message': 'Coupon usage limit reached'})
     discount = round(subtotal * coupon.discount_percent / 100, 2)
+    session['validated_coupon'] = code.upper()
     return jsonify({'valid': True, 'discount': discount, 'percent': coupon.discount_percent, 'message': f'Coupon applied! You save ${discount:.2f}'})
 
 @app.route('/checkout', methods=['GET', 'POST'])
@@ -657,8 +658,9 @@ def checkout():
         db.session.commit()
         return redirect(url_for('payment', oid=order.id))
 
+    validated_coupon = session.pop('validated_coupon', None)
     return render_template('checkout.html', cart_items=cart_items,
-        subtotal=subtotal, tax=tax, shipping=shipping, total=total)
+        subtotal=subtotal, tax=tax, shipping=shipping, total=total, validated_coupon=validated_coupon)
 
 # ====== PAYMENT ======
 @app.route('/payment/<int:oid>', methods=['GET', 'POST'])
