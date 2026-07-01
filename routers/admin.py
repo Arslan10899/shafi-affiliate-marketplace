@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File, Form
 from fastapi.responses import RedirectResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func, desc
 from slugify import slugify
 import os
@@ -10,7 +10,7 @@ import time as time_module
 from typing import List
 
 from database import get_db
-from models import Product, ProductImage, Category, User, HeroSlide, AffiliateClick, SocialLink, Role, Platform, UserLink
+from models import Product, ProductImage, Category, User, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
 from config import UPLOAD_DIR, ALLOWED_EXTENSIONS
 from routers.auth import get_user_from_token, require_admin
 import bcrypt as _bcrypt
@@ -66,7 +66,7 @@ def admin_products(request: Request, db: Session = Depends(get_db)):
     if not user:
         return RedirectResponse(url="/auth/login", status_code=303)
 
-    products = db.query(Product).order_by(desc(Product.created_at)).all()
+    products = db.query(Product).options(joinedload(Product.category)).order_by(desc(Product.created_at)).all()
     return render("admin/products.html", {
         "request": request,
         "user": get_user_dict(user),
@@ -554,12 +554,10 @@ def admin_users(request: Request, db: Session = Depends(get_db)):
     user = require_admin(request, db)
     if not user:
         return RedirectResponse(url="/auth/login", status_code=303)
-    users = db.query(User).order_by(User.created_at.desc()).all()
-    platforms = db.query(Platform).order_by(Platform.name).all()
-    roles_list = db.query(Role).all()
+    users = db.query(User).options(joinedload(User.links)).order_by(User.created_at.desc()).all()
     return render("admin/users.html", {
         "request": request, "user": get_user_dict(user),
-        "users": users, "platforms": platforms, "roles_list": roles_list,
+        "users": users,
     })
 
 

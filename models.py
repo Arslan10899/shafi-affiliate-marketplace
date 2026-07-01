@@ -106,14 +106,6 @@ class SocialLink(Base):
     is_active = Column(Boolean, default=True)
 
 
-class Role(Base):
-    __tablename__ = "roles"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(50), unique=True, nullable=False)
-    description = Column(String(200), default="")
-
-
 class Platform(Base):
     __tablename__ = "platforms"
 

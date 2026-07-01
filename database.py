@@ -25,5 +25,5 @@ def get_db():
 
 
 def init_db():
-    from models import User, Category, Product, ProductImage, HeroSlide, AffiliateClick
+    from models import User, Category, Product, ProductImage, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
     Base.metadata.create_all(bind=engine)

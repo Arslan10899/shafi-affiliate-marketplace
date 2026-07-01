@@ -30,11 +30,6 @@ app.include_router(dashboard.router)
 app.include_router(profile.router)
 
 
-@app.get("/favicon.ico")
-async def favicon():
-    return RedirectResponse(url="/static/img/favicon.ico")
-
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

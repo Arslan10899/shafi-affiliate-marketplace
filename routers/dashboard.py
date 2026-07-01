@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, Query
 from fastapi.responses import RedirectResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func
 
 from database import get_db
@@ -22,10 +22,10 @@ def user_dashboard(
         return RedirectResponse(url="/auth/login", status_code=303)
 
     user_dict = get_user_from_token(request)
-    links = db.query(UserLink).filter(UserLink.user_id == current_user.id).order_by(UserLink.created_at.desc()).all()
+    links = db.query(UserLink).options(joinedload(UserLink.platform)).filter(UserLink.user_id == current_user.id).order_by(UserLink.created_at.desc()).all()
     platforms = db.query(Platform).order_by(Platform.name).all()
     categories = db.query(Category).order_by(Category.name).all()
-    products = db.query(Product).order_by(Product.created_at.desc()).all()
+    products = db.query(Product).options(joinedload(Product.category)).order_by(Product.created_at.desc()).all()
     total_products = db.query(func.count(Product.id)).scalar() or 0
     total_categories = db.query(func.count(Category.id)).scalar() or 0
     total_platforms = db.query(func.count(Platform.id)).scalar() or 0

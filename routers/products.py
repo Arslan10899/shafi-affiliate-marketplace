@@ -1,7 +1,7 @@
 import random as _random
 from fastapi import APIRouter, Depends, HTTPException, Request, Query
 from fastapi.responses import RedirectResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, selectinload
 from sqlalchemy import func, or_
 
 from database import get_db
@@ -51,7 +51,7 @@ def shop(
     user = get_user_from_token(request)
     per_page = 12
 
-    q = db.query(Product)
+    q = db.query(Product).options(joinedload(Product.category))
 
     if category:
         cat = db.query(Category).filter(Category.slug == category).first()
@@ -108,14 +108,11 @@ def shop(
 def product_detail(slug: str, request: Request, db: Session = Depends(get_db)):
     user = get_user_from_token(request)
 
-    product = db.query(Product).filter(Product.slug == slug).first()
+    product = db.query(Product).options(joinedload(Product.category), selectinload(Product.images)).filter(Product.slug == slug).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
 
-    # Eagerly load images
-    product.images = db.query(ProductImage).filter(ProductImage.product_id == product.id).order_by(ProductImage.sort_order).all()
-
-    related_products = db.query(Product).filter(
+    related_products = db.query(Product).options(joinedload(Product.category)).filter(
         Product.category_id == product.category_id,
         Product.id != product.id,
     ).limit(4).all()
@@ -131,19 +128,19 @@ def product_detail(slug: str, request: Request, db: Session = Depends(get_db)):
 
 
 @router.get("/faq")
-def faq_page(request: Request):
+async def faq_page(request: Request):
     user = get_user_from_token(request)
     return render("faq.html", {"request": request, "user": user, "categories": []})
 
 
 @router.get("/privacy")
-def privacy_page(request: Request):
+async def privacy_page(request: Request):
     user = get_user_from_token(request)
     return render("privacy.html", {"request": request, "user": user, "categories": []})
 
 
 @router.get("/terms")
-def terms_page(request: Request):
+async def terms_page(request: Request):
     user = get_user_from_token(request)
     return render("terms.html", {"request": request, "user": user, "categories": []})
 
