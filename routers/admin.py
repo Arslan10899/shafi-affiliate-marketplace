@@ -11,7 +11,8 @@ from datetime import datetime as dt_module
 
 from database import get_db
 from models import Product, ProductImage, Category, User, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
-from config import UPLOAD_DIR, ALLOWED_EXTENSIONS
+from config import UPLOAD_DIR, DB_PATH, ALLOWED_EXTENSIONS
+from sqlalchemy import create_engine
 import bcrypt as _bcrypt
 from templates import render, invalidate_social_cache
 
@@ -619,16 +620,6 @@ def admin_delete_platform(pid):
     return redirect("/admin/platforms")
 
 
-def serialize_row(row):
-    d = {}
-    for col in row.__table__.columns:
-        val = getattr(row, col.name)
-        if isinstance(val, dt_module):
-            val = val.isoformat()
-        d[col.name] = val
-    return d
-
-
 @bp.route("/backup")
 def admin_backup():
     user = require_admin()
@@ -642,30 +633,39 @@ def admin_backup_export():
     user = require_admin()
     if not user:
         return redirect("/auth/login")
-    db = get_db()
+
+    import zipfile, io
     from flask import Response as FlaskResponse
-    from models import User, Category, Product, ProductImage, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
+    from database import engine
 
-    data = {
-        "version": "1.0",
-        "exported_at": dt_module.utcnow().isoformat(),
-        "users": [serialize_row(r) for r in db.query(User).all()],
-        "categories": [serialize_row(r) for r in db.query(Category).all()],
-        "products": [serialize_row(r) for r in db.query(Product).all()],
-        "product_images": [serialize_row(r) for r in db.query(ProductImage).all()],
-        "hero_slides": [serialize_row(r) for r in db.query(HeroSlide).all()],
-        "affiliate_clicks": [serialize_row(r) for r in db.query(AffiliateClick).all()],
-        "social_links": [serialize_row(r) for r in db.query(SocialLink).all()],
-        "platforms": [serialize_row(r) for r in db.query(Platform).all()],
-        "user_links": [serialize_row(r) for r in db.query(UserLink).all()],
-    }
+    # Flush all pending reads by closing any open session
+    db = get_db()
     db.close()
+    engine.dispose()
 
-    json_str = json.dumps(data, indent=2, ensure_ascii=False, default=str)
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        # Add database file
+        zf.write(DB_PATH, arcname="affiliate.db")
+
+        # Add all uploaded files
+        if os.path.isdir(UPLOAD_DIR):
+            for root, dirs, files in os.walk(UPLOAD_DIR):
+                for fn in files:
+                    fpath = os.path.join(root, fn)
+                    arcname = os.path.join("uploads", os.path.relpath(fpath, UPLOAD_DIR))
+                    zf.write(fpath, arcname=arcname)
+
+    # Re-initialize engine
+    import database as db_mod
+    from database import DATABASE_URL
+    db_mod.engine = create_engine(DATABASE_URL, echo=False, connect_args={"check_same_thread": False})
+
+    buf.seek(0)
     return FlaskResponse(
-        json_str,
-        mimetype="application/json",
-        headers={"Content-Disposition": f"attachment; filename=shafi_backup_{dt_module.now().strftime('%Y%m%d_%H%M%S')}.json"},
+        buf.getvalue(),
+        mimetype="application/zip",
+        headers={"Content-Disposition": f"attachment; filename=shafi_backup_{dt_module.now().strftime('%Y%m%d_%H%M%S')}.zip"},
     )
 
 
@@ -674,56 +674,59 @@ def admin_backup_import():
     user = require_admin()
     if not user:
         return redirect("/auth/login")
-    from flask import flash
+
+    import zipfile, io
 
     file = request.files.get("backup_file")
     if not file or not file.filename:
         return redirect("/admin/backup?error=nofile")
 
-    try:
-        data = json.loads(file.read().decode("utf-8"))
-    except Exception:
+    if not file.filename.endswith(".zip"):
         return redirect("/admin/backup?error=invalid")
 
-    from models import User, Category, Product, ProductImage, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
-
-    db = get_db()
     try:
-        # Clear all existing data in reverse dependency order
-        db.query(AffiliateClick).delete()
-        db.query(UserLink).delete()
-        db.query(ProductImage).delete()
-        db.query(Product).delete()
-        db.query(HeroSlide).delete()
-        db.query(SocialLink).delete()
-        db.query(Platform).delete()
-        db.query(Category).delete()
-        db.query(User).delete()
-        db.commit()
+        from database import engine
+        from config import UPLOAD_DIR
 
-        # Import in dependency order
-        for table, model in [
-            ("users", User), ("categories", Category), ("platforms", Platform),
-            ("products", Product), ("product_images", ProductImage),
-            ("hero_slides", HeroSlide), ("social_links", SocialLink),
-            ("user_links", UserLink), ("affiliate_clicks", AffiliateClick),
-        ]:
-            for row_data in data.get(table, []):
-                # Remove id so SQLAlchemy auto-assigns
-                row_data.pop("id", None)
-                # Parse datetime strings back
-                for k, v in row_data.items():
-                    if isinstance(v, str) and "T" in v and len(v) > 15:
-                        try:
-                            row_data[k] = dt_module.fromisoformat(v)
-                        except Exception:
-                            pass
-                obj = model(**row_data)
-                db.add(obj)
-            db.commit()
-
+        # Close all connections before replacing db file
+        db = get_db()
         db.close()
+        engine.dispose()
+
+        zf = zipfile.ZipFile(io.BytesIO(file.read()))
+        db_extracted = False
+
+        for name in zf.namelist():
+            # Normalise path separators
+            arcname = name.replace("\\", "/")
+            if arcname == "affiliate.db":
+                # Extract database — replace in-place
+                os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+                with open(DB_PATH, "wb") as f:
+                    f.write(zf.read(name))
+                db_extracted = True
+            elif arcname.startswith("uploads/"):
+                rel = arcname[len("uploads/"):]
+                if not rel:
+                    continue
+                dest = os.path.join(UPLOAD_DIR, rel)
+                if name.endswith("/"):
+                    os.makedirs(dest, exist_ok=True)
+                else:
+                    os.makedirs(os.path.dirname(dest), exist_ok=True)
+                    with open(dest, "wb") as f:
+                        f.write(zf.read(name))
+
+        zf.close()
+
+        # Re-initialize engine
+        import database as db_mod
+        from database import DATABASE_URL
+        db_mod.engine = create_engine(DATABASE_URL, echo=False, connect_args={"check_same_thread": False})
+
+        if not db_extracted:
+            return redirect("/admin/backup?error=invalid")
+
         return redirect("/admin/backup?success=1")
     except Exception as e:
-        db.close()
         return redirect(f"/admin/backup?error={str(e)[:50]}")
