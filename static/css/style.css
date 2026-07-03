@@ -130,6 +130,10 @@ body {
     opacity: 1 !important;
     border-color: #f59e0b !important;
 }
+/* Slower carousel transition */
+.carousel-item {
+    transition-duration: 0.8s !important;
+}
 
 /* ===== CATEGORY CARDS ===== */
 .category-card {
