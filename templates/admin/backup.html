@@ -1,0 +1,59 @@
+{% extends "admin/base.html" %}
+{% block title %}Backup & Restore{% endblock %}
+{% block admin_content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0"><i class="fas fa-database me-2 text-warning"></i>Backup & Restore</h4>
+</div>
+
+{% if request.args.get('success') %}
+<div class="alert alert-success alert-dismissible fade show">Data imported successfully! <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+{% endif %}
+{% if request.args.get('error') == 'nofile' %}
+<div class="alert alert-danger alert-dismissible fade show">Please select a backup file to upload. <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+{% endif %}
+{% if request.args.get('error') == 'invalid' %}
+<div class="alert alert-danger alert-dismissible fade show">Invalid backup file format. <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+{% endif %}
+{% if request.args.get('error') and request.args.get('error') not in ('nofile', 'invalid') %}
+<div class="alert alert-danger alert-dismissible fade show">Import error: {{ request.args.get('error') }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+{% endif %}
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-5">
+                <div class="mb-4">
+                    <i class="fas fa-download fa-4x text-warning"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Export Database</h5>
+                <p class="text-muted small mb-4">Download all data as JSON backup file including users, products, categories, platforms, slides, social links, clicks, and user links.</p>
+                <a href="/admin/backup/export" class="btn btn-warning btn-lg rounded-pill px-5">
+                    <i class="fas fa-download me-2"></i> Download Backup
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-5">
+                <div class="mb-4">
+                    <i class="fas fa-upload fa-4x text-primary"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Import Database</h5>
+                <p class="text-muted small mb-4"><strong>Warning:</strong> This will replace ALL existing data with the uploaded backup. This action cannot be undone.</p>
+                <form method="POST" action="/admin/backup/import" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input type="file" name="backup_file" class="form-control" accept=".json" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5" onclick="return confirm('This will replace ALL existing data! Are you sure?')">
+                        <i class="fas fa-upload me-2"></i> Import Backup
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

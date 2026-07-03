@@ -2,10 +2,12 @@ from flask import Blueprint, request, redirect, abort, session
 from sqlalchemy.orm import joinedload
 from sqlalchemy import func, desc
 from slugify import slugify
+import json
 import os
 import random
 import string
 import time as time_module
+from datetime import datetime as dt_module
 
 from database import get_db
 from models import Product, ProductImage, Category, User, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
@@ -615,3 +617,113 @@ def admin_delete_platform(pid):
         db.commit()
     db.close()
     return redirect("/admin/platforms")
+
+
+def serialize_row(row):
+    d = {}
+    for col in row.__table__.columns:
+        val = getattr(row, col.name)
+        if isinstance(val, dt_module):
+            val = val.isoformat()
+        d[col.name] = val
+    return d
+
+
+@bp.route("/backup")
+def admin_backup():
+    user = require_admin()
+    if not user:
+        return redirect("/auth/login")
+    return render("admin/backup.html", user=user)
+
+
+@bp.route("/backup/export")
+def admin_backup_export():
+    user = require_admin()
+    if not user:
+        return redirect("/auth/login")
+    db = get_db()
+    from flask import Response as FlaskResponse
+    from models import User, Category, Product, ProductImage, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
+
+    data = {
+        "version": "1.0",
+        "exported_at": dt_module.utcnow().isoformat(),
+        "users": [serialize_row(r) for r in db.query(User).all()],
+        "categories": [serialize_row(r) for r in db.query(Category).all()],
+        "products": [serialize_row(r) for r in db.query(Product).all()],
+        "product_images": [serialize_row(r) for r in db.query(ProductImage).all()],
+        "hero_slides": [serialize_row(r) for r in db.query(HeroSlide).all()],
+        "affiliate_clicks": [serialize_row(r) for r in db.query(AffiliateClick).all()],
+        "social_links": [serialize_row(r) for r in db.query(SocialLink).all()],
+        "platforms": [serialize_row(r) for r in db.query(Platform).all()],
+        "user_links": [serialize_row(r) for r in db.query(UserLink).all()],
+    }
+    db.close()
+
+    json_str = json.dumps(data, indent=2, ensure_ascii=False, default=str)
+    return FlaskResponse(
+        json_str,
+        mimetype="application/json",
+        headers={"Content-Disposition": f"attachment; filename=shafi_backup_{dt_module.now().strftime('%Y%m%d_%H%M%S')}.json"},
+    )
+
+
+@bp.route("/backup/import", methods=["POST"])
+def admin_backup_import():
+    user = require_admin()
+    if not user:
+        return redirect("/auth/login")
+    from flask import flash
+
+    file = request.files.get("backup_file")
+    if not file or not file.filename:
+        return redirect("/admin/backup?error=nofile")
+
+    try:
+        data = json.loads(file.read().decode("utf-8"))
+    except Exception:
+        return redirect("/admin/backup?error=invalid")
+
+    from models import User, Category, Product, ProductImage, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
+
+    db = get_db()
+    try:
+        # Clear all existing data in reverse dependency order
+        db.query(AffiliateClick).delete()
+        db.query(UserLink).delete()
+        db.query(ProductImage).delete()
+        db.query(Product).delete()
+        db.query(HeroSlide).delete()
+        db.query(SocialLink).delete()
+        db.query(Platform).delete()
+        db.query(Category).delete()
+        db.query(User).delete()
+        db.commit()
+
+        # Import in dependency order
+        for table, model in [
+            ("users", User), ("categories", Category), ("platforms", Platform),
+            ("products", Product), ("product_images", ProductImage),
+            ("hero_slides", HeroSlide), ("social_links", SocialLink),
+            ("user_links", UserLink), ("affiliate_clicks", AffiliateClick),
+        ]:
+            for row_data in data.get(table, []):
+                # Remove id so SQLAlchemy auto-assigns
+                row_data.pop("id", None)
+                # Parse datetime strings back
+                for k, v in row_data.items():
+                    if isinstance(v, str) and "T" in v and len(v) > 15:
+                        try:
+                            row_data[k] = dt_module.fromisoformat(v)
+                        except Exception:
+                            pass
+                obj = model(**row_data)
+                db.add(obj)
+            db.commit()
+
+        db.close()
+        return redirect("/admin/backup?success=1")
+    except Exception as e:
+        db.close()
+        return redirect(f"/admin/backup?error={str(e)[:50]}")
