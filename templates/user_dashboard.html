@@ -147,7 +147,7 @@
                                     {% for p in products[:5] %}
                                     <tr>
                                         <td><a href="/product/{{ p.slug }}" class="text-decoration-none">{{ p.title[:40] }}</a></td>
-                                        <td>{% if p.price %}${{ "%.2f"|format(p.price) }}{% else %}-{% endif %}</td>
+                                        <td>{% if p.price %}{% set pp = price_parts(p.price) %}<span class="price-amazon"><span class="price-currency">{{ p.currency or 'USD' }}</span><span class="price-whole">{{ pp.int }}</span><span class="price-decimal">.{{ pp.dec }}</span></span>{% else %}-{% endif %}</td>
                                         <td><span class="badge bg-light text-dark">{{ p.affiliate_platform|title }}</span></td>
                                     </tr>
                                     {% else %}
@@ -188,7 +188,7 @@
                                     </td>
                                     <td class="small">{{ p.title[:60] }}{% if p.title|length > 60 %}...{% endif %}</td>
                                     <td><span class="badge bg-light text-dark">{{ p.category.name if p.category else '—' }}</span></td>
-                                    <td>{% if p.price %}${{ "%.2f"|format(p.price) }}{% else %}-{% endif %}</td>
+                                    <td>{% if p.price %}{% set pp = price_parts(p.price) %}<span class="price-amazon"><span class="price-currency">{{ p.currency or 'USD' }}</span><span class="price-whole">{{ pp.int }}</span><span class="price-decimal">.{{ pp.dec }}</span></span>{% else %}-{% endif %}</td>
                                     <td>
                                         {% if p.rating %}
                                         <span class="text-warning small">★</span> {{ p.rating }}
