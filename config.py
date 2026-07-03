@@ -10,6 +10,17 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 
+CURRENCIES = {
+    "USD": {"symbol": "$", "name": "US Dollar"},
+    "PKR": {"symbol": "₨", "name": "Pakistani Rupee"},
+    "EUR": {"symbol": "€", "name": "Euro"},
+    "GBP": {"symbol": "£", "name": "British Pound"},
+    "INR": {"symbol": "₹", "name": "Indian Rupee"},
+    "BDT": {"symbol": "৳", "name": "Bangladeshi Taka"},
+    "AED": {"symbol": "د.إ", "name": "UAE Dirham"},
+    "SAR": {"symbol": "﷼", "name": "Saudi Riyal"},
+}
+
 AFFILIATE_PLATFORMS = {
     "amazon": {"name": "Amazon", "icon": "fab fa-amazon", "color": "#FF9900"},
     "alibaba": {"name": "Alibaba", "icon": "fas fa-globe", "color": "#FF6A00"},

@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 
-from config import SECRET_KEY
+from config import SECRET_KEY, CURRENCIES
 from database import init_db
 from templates import social_links_context
 
@@ -17,7 +17,10 @@ app.register_blueprint(admin.bp)
 app.register_blueprint(dashboard.bp)
 app.register_blueprint(profile.bp)
 
+def inject_globals():
+    return dict(CURRENCIES=CURRENCIES)
 app.context_processor(social_links_context)
+app.context_processor(inject_globals)
 
 init_db()
 

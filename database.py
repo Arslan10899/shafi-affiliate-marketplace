@@ -22,3 +22,11 @@ def get_db():
 def init_db():
     from models import User, Category, Product, ProductImage, HeroSlide, AffiliateClick, SocialLink, Platform, UserLink
     Base.metadata.create_all(bind=engine)
+    # Add currency column if missing (migration)
+    from sqlalchemy import inspect, text
+    inspector = inspect(engine)
+    columns = [c['name'] for c in inspector.get_columns('products')]
+    if 'currency' not in columns:
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE products ADD COLUMN currency VARCHAR(10) DEFAULT 'USD'"))
+            conn.commit()

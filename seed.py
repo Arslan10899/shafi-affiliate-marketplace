@@ -91,6 +91,7 @@ def seed():
                 image=f"https://images.unsplash.com/photo-{unsplash_ids[i]}?w=400&h=400&fit=crop",
                 price=price,
                 old_price=old_price,
+                currency="USD",
                 rating=rating,
                 category_id=cats[cat_idx].id,
                 affiliate_platform=platform,

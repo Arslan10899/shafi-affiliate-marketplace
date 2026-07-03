@@ -28,9 +28,17 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="form-label small fw-semibold">Price</label>
                     <input type="number" name="price" class="form-control" step="0.01" min="0" value="{{ product.price if product else '' }}">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold">Currency</label>
+                    <select name="currency" class="form-select">
+                        {% for code, data in {'USD': {'symbol': '$', 'name': 'US Dollar'}, 'PKR': {'symbol': '₨', 'name': 'Pakistani Rupee'}, 'EUR': {'symbol': '€', 'name': 'Euro'}, 'GBP': {'symbol': '£', 'name': 'British Pound'}, 'INR': {'symbol': '₹', 'name': 'Indian Rupee'}, 'BDT': {'symbol': '৳', 'name': 'Bangladeshi Taka'}, 'AED': {'symbol': 'د.إ', 'name': 'UAE Dirham'}, 'SAR': {'symbol': '﷼', 'name': 'Saudi Riyal'}, 'CAD': {'symbol': 'C$', 'name': 'Canadian Dollar'}, 'AUD': {'symbol': 'A$', 'name': 'Australian Dollar'}}.items() %}
+                        <option value="{{ code }}" {% if product and product.currency == code %}selected{% endif %}>{{ code }} ({{ data.symbol }}) - {{ data.name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label small fw-semibold">Old Price (for discount display)</label>
