@@ -209,3 +209,26 @@ body {
     .product-card .fs-5 { font-size: 0.9rem !important; }
     .admin-sidebar { width: 50px !important; }
 }
+
+.price-amazon .price-currency {
+    font-size: 0.65em;
+    vertical-align: super;
+    font-weight: 400;
+    color: inherit;
+}
+.price-amazon .price-whole {
+    font-size: 1em;
+    font-weight: 700;
+}
+.price-amazon .price-decimal {
+    font-size: 0.65em;
+    vertical-align: super;
+    font-weight: 400;
+    color: inherit;
+}
+.price-amazon .price-old {
+    font-size: 0.85em;
+    font-weight: 400;
+    text-decoration: line-through;
+    color: #6b7280;
+}

@@ -19,6 +19,15 @@ app.register_blueprint(profile.bp)
 
 def inject_globals():
     return dict(CURRENCIES=CURRENCIES)
+
+def price_parts(price):
+    s = "{:,.2f}".format(price)
+    if "." in s:
+        a, b = s.rsplit(".", 1)
+        return {"int": a, "dec": b}
+    return {"int": s, "dec": "00"}
+app.jinja_env.globals["price_parts"] = price_parts
+
 app.context_processor(social_links_context)
 app.context_processor(inject_globals)
 

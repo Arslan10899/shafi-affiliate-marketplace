@@ -79,10 +79,20 @@
 
                 <div class="mb-3">
                     {% if product.price %}
-                    {% set sym = CURRENCIES.get(product.currency or 'USD', {}).get('symbol', '$') %}
-                    <span class="fs-3 fw-bold text-dark">{{ sym }}{{ "%.2f"|format(product.price) }}</span>
+                    {% set cur = product.currency or 'USD' %}
+                    {% set p = price_parts(product.price) %}
+                    <span class="fs-1 fw-bold text-dark price-amazon">
+                        <span class="price-currency">{{ cur }}</span>
+                        <span class="price-whole">{{ p.int }}</span>
+                        <span class="price-decimal">.{{ p.dec }}</span>
+                    </span>
                     {% if product.old_price %}
-                    <span class="text-muted text-decoration-line-through fs-5 ms-2">{{ sym }}{{ "%.2f"|format(product.old_price) }}</span>
+                    {% set op = price_parts(product.old_price) %}
+                    <span class="price-old ms-3">
+                        <span class="price-currency">{{ cur }}</span>
+                        <span class="price-whole">{{ op.int }}</span>
+                        <span class="price-decimal">.{{ op.dec }}</span>
+                    </span>
                     <span class="badge bg-danger ms-2">Save {{ ((product.old_price - product.price) / product.old_price * 100)|int }}%</span>
                     {% endif %}
                     {% else %}
