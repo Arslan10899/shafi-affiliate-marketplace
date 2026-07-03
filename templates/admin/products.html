@@ -18,7 +18,7 @@
                         <th>Platform</th>
                         <th>Price</th>
                         <th>Rating</th>
-                        <th>Featured</th>
+                        <th>Status</th>
                         <th style="width:160px">Actions</th>
                     </tr>
                 </thead>
@@ -32,7 +32,7 @@
                         <td><span class="badge bg-light text-dark">{{ p.affiliate_platform|title }}</span></td>
                         <td>{% if p.price %}${{ "%.2f"|format(p.price) }}{% else %}-{% endif %}</td>
                         <td><span class="text-warning">{{ p.rating }}</span></td>
-                        <td>{% if p.is_featured %}<span class="badge bg-success">Yes</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}</td>
+                        <td>{% if p.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
                         <td>
                             <a href="/admin/products/edit/{{ p.id }}" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a>
                             <a href="/admin/products/delete/{{ p.id }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this product?')" title="Delete"><i class="fas fa-trash"></i></a>

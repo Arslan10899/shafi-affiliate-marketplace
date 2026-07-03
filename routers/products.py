@@ -18,9 +18,9 @@ def get_categories(db):
 def home():
     user = get_user_from_session()
     db = get_db()
-    featured = db.query(Product).filter(Product.is_featured == True).all()
+    featured = db.query(Product).filter(Product.is_featured == True, Product.is_active == True).all()
     featured_products = _random.sample(featured, min(8, len(featured)))
-    new_products = db.query(Product).order_by(Product.created_at.desc()).limit(8).all()
+    new_products = db.query(Product).filter(Product.is_active == True).order_by(Product.created_at.desc()).limit(8).all()
     categories = get_categories(db)
     hero_slides = db.query(HeroSlide).filter(HeroSlide.is_active == True).order_by(HeroSlide.sort_order).all()
     db.close()
@@ -47,7 +47,7 @@ def shop():
     per_page = 12
 
     db = get_db()
-    q = db.query(Product).options(joinedload(Product.category))
+    q = db.query(Product).options(joinedload(Product.category)).filter(Product.is_active == True)
 
     if category:
         cat = db.query(Category).filter(Category.slug == category).first()
@@ -103,7 +103,7 @@ def shop():
 def product_detail(slug):
     user = get_user_from_session()
     db = get_db()
-    product = db.query(Product).options(joinedload(Product.category), selectinload(Product.images)).filter(Product.slug == slug).first()
+    product = db.query(Product).options(joinedload(Product.category), selectinload(Product.images)).filter(Product.slug == slug, Product.is_active == True).first()
     if not product:
         db.close()
         abort(404)
@@ -111,6 +111,7 @@ def product_detail(slug):
     related_products = db.query(Product).options(joinedload(Product.category)).filter(
         Product.category_id == product.category_id,
         Product.id != product.id,
+        Product.is_active == True,
     ).limit(4).all()
 
     all_categories = get_categories(db)

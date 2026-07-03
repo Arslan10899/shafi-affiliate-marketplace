@@ -106,6 +106,7 @@ def admin_add_product():
         price=float(request.form.get("price", 0) or 0) or None,
         old_price=float(request.form.get("old_price", 0) or 0) or None,
         currency=request.form.get("currency", "USD"),
+        is_active=request.form.get("is_active") == "on",
         rating=float(request.form.get("rating", 0)),
         category_id=int(request.form.get("category_id", 0)) or None,
         affiliate_platform=request.form.get("affiliate_platform", "amazon"),
@@ -164,6 +165,7 @@ def admin_edit_product(pid):
     product.price = float(request.form.get("price", 0) or 0) or None
     product.old_price = float(request.form.get("old_price", 0) or 0) or None
     product.currency = request.form.get("currency", "USD")
+    product.is_active = request.form.get("is_active") == "on"
     product.rating = float(request.form.get("rating", 0))
     product.category_id = int(request.form.get("category_id", 0)) or None
     product.affiliate_platform = request.form.get("affiliate_platform", "") or product.affiliate_platform

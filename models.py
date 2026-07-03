@@ -48,6 +48,7 @@ class Product(Base):
     rating = Column(Float, default=0)
     category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
     currency = Column(String(10), default="USD")
+    is_active = Column(Boolean, default=True)
     affiliate_platform = Column(String(30), nullable=False)
     affiliate_url = Column(String(500), nullable=False)
     is_featured = Column(Boolean, default=False)

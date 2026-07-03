@@ -30,3 +30,7 @@ def init_db():
         with engine.connect() as conn:
             conn.execute(text("ALTER TABLE products ADD COLUMN currency VARCHAR(10) DEFAULT 'USD'"))
             conn.commit()
+    if 'is_active' not in columns:
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE products ADD COLUMN is_active BOOLEAN DEFAULT 1"))
+            conn.commit()

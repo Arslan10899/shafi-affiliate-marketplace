@@ -92,6 +92,7 @@ def seed():
                 price=price,
                 old_price=old_price,
                 currency="USD",
+                is_active=True,
                 rating=rating,
                 category_id=cats[cat_idx].id,
                 affiliate_platform=platform,

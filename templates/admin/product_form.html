@@ -80,6 +80,10 @@
                 </div>
                 <div class="col-12">
                     <div class="form-check form-check-inline">
+                        <input type="checkbox" name="is_active" class="form-check-input" id="chkActive" {% if (product and product.is_active) or not product %}checked{% endif %}>
+                        <label class="form-check-label fw-semibold" for="chkActive"><i class="fas fa-check-circle me-1 text-success"></i> Active</label>
+                    </div>
+                    <div class="form-check form-check-inline">
                         <input type="checkbox" name="is_featured" class="form-check-input" id="chkFeatured" {% if product and product.is_featured %}checked{% endif %}>
                         <label class="form-check-label" for="chkFeatured">Featured</label>
                     </div>
