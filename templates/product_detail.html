@@ -22,12 +22,7 @@
                     {% if product.images and product.images|length > 0 %}
                     {% set img_count = product.images|length %}
                     {% if img_count > 1 %}
-                    <div id="productGallery" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-indicators">
-                            {% for img in product.images %}
-                            <button type="button" data-bs-target="#productGallery" data-bs-slide-to="{{ loop.index0 }}"{% if loop.first %} class="active"{% endif %}></button>
-                            {% endfor %}
-                        </div>
+                    <div id="productGallery" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
                         <div class="carousel-inner">
                             {% for img in product.images %}
                             <div class="carousel-item{% if loop.first %} active{% endif %}">
@@ -41,6 +36,11 @@
                         <button class="carousel-control-next" type="button" data-bs-target="#productGallery" data-bs-slide="next">
                             <span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span>
                         </button>
+                    </div>
+                    <div class="thumbnails-wrapper d-flex gap-2 mt-2 overflow-auto pb-1" style="scrollbar-width:thin">
+                        {% for img in product.images %}
+                        <img src="{{ img.image_url }}" class="thumb-img{% if loop.first %} active{% endif %}" data-bs-target="#productGallery" data-bs-slide-to="{{ loop.index0 }}" alt="Thumbnail {{ loop.index }}" style="width:64px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer;opacity:0.5;border:2px solid transparent;transition:all 0.2s;flex-shrink:0">
+                        {% endfor %}
                     </div>
                     {% else %}
                     <img src="{{ product.images[0].image_url }}" class="card-img-top product-detail-img" alt="{{ product.title }}">

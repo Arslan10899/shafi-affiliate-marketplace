@@ -123,6 +123,13 @@ body {
     object-fit: contain;
     background: #f8fafc;
 }
+.thumb-img:hover {
+    opacity: 0.8 !important;
+}
+.thumb-img.active {
+    opacity: 1 !important;
+    border-color: #f59e0b !important;
+}
 
 /* ===== CATEGORY CARDS ===== */
 .category-card {
