@@ -43,17 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
     var catSwiperEl = document.querySelector('.catSwiper');
     if (catSwiperEl && typeof Swiper !== 'undefined') {
         new Swiper('.catSwiper', {
-            slidesPerView: 'auto',
-            spaceBetween: 24,
+            slidesPerView: 6,
+            spaceBetween: 20,
             loop: true,
             navigation: {
                 nextEl: '.cat-swiper-next',
                 prevEl: '.cat-swiper-prev',
             },
             breakpoints: {
-                320: { spaceBetween: 16 },
-                576: { spaceBetween: 20 },
-                768: { spaceBetween: 24 },
+                320: { slidesPerView: 3, spaceBetween: 12 },
+                480: { slidesPerView: 4, spaceBetween: 14 },
+                768: { slidesPerView: 5, spaceBetween: 16 },
+                992: { slidesPerView: 6, spaceBetween: 20 },
             }
         });
     }
