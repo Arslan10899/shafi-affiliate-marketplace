@@ -136,26 +136,25 @@ body {
 }
 
 /* ===== CATEGORY CARDS ===== */
-.category-card {
-    border-radius: 16px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-}
-.category-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
-}
-.category-icon {
-    width: 64px;
-    height: 64px;
+.category-circle {
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.category-circle:hover {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+.category-circle-icon {
     transition: transform 0.3s ease;
 }
-.category-card:hover .category-icon {
-    transform: scale(1.15) rotate(-5deg);
+.category-circle:hover .category-circle-icon {
+    transform: rotate(-8deg) scale(1.1);
 }
 
 /* ===== ADMIN SIDEBAR ===== */
