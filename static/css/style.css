@@ -308,7 +308,6 @@ body {
     align-items: stretch;
 }
 .catSwiper .swiper-slide {
-    width: auto !important;
     height: auto !important;
 }
 .cat-swiper-next,
