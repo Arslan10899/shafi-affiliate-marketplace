@@ -39,17 +39,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Category slider horizontal scroll
-    var slider = document.getElementById('catSlider');
-    var prevBtn = document.getElementById('catPrev');
-    var nextBtn = document.getElementById('catNext');
-    if (slider && prevBtn && nextBtn) {
-        var scrollAmount = 200;
-        prevBtn.addEventListener('click', function() {
-            slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        });
-        nextBtn.addEventListener('click', function() {
-            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    // Category Swiper
+    var catSwiperEl = document.querySelector('.catSwiper');
+    if (catSwiperEl && typeof Swiper !== 'undefined') {
+        new Swiper('.catSwiper', {
+            slidesPerView: 'auto',
+            spaceBetween: 24,
+            loop: true,
+            navigation: {
+                nextEl: '.cat-swiper-next',
+                prevEl: '.cat-swiper-prev',
+            },
+            breakpoints: {
+                320: { spaceBetween: 16 },
+                576: { spaceBetween: 20 },
+                768: { spaceBetween: 24 },
+            }
         });
     }
 });
