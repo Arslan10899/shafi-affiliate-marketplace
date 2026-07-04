@@ -49,7 +49,7 @@
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <small class="text-muted d-block">Member Since</small>
-                                <span>{{ profile.created_at.strftime('%B %Y') if profile.created_at else '—' }}</span>
+                                <span>{{ profile.created_at.strftime('%d-%m-%Y') if profile.created_at else '—' }}</span>
                             </div>
                         </div>
 

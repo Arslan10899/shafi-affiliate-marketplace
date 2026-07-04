@@ -25,7 +25,7 @@
                         <td class="text-muted">{{ click.id }}</td>
                         <td>{{ click.product_title[:50] }}</td>
                         <td><span class="badge bg-light text-dark">{{ click.platform|title }}</span></td>
-                        <td><small>{{ click.clicked_at.strftime('%Y-%m-%d %H:%M') if click.clicked_at else '-' }}</small></td>
+                        <td><small>{{ click.clicked_at.strftime('%d-%m-%Y %H:%M') if click.clicked_at else '-' }}</small></td>
                         <td><small class="text-muted">{{ click.ip_address }}</small></td>
                     </tr>
                     {% else %}

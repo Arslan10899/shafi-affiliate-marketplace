@@ -55,7 +55,7 @@
                         <td><span class="badge bg-secondary">{{ u.links|length }}</span></td>
                         <td class="small">{{ '%.1f'|format(u.storage_used_mb) }} MB</td>
                         <td>{% if u.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-danger">Inactive</span>{% endif %}</td>
-                        <td class="small text-muted">{{ u.created_at.strftime('%Y-%m-%d') if u.created_at else '-' }}</td>
+                        <td class="small text-muted">{{ u.created_at.strftime('%d-%m-%Y') if u.created_at else '-' }}</td>
                         <td>
                             <div class="d-flex gap-1">
                                 <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editUserModal{{ u.id }}" title="Edit"><i class="fas fa-edit"></i></button>

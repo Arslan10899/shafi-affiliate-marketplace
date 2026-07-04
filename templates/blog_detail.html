@@ -18,7 +18,7 @@
                     <h1 class="fw-bold mb-3" style="color:#0f172a">{{ post.title }}</h1>
                     <div class="d-flex gap-3 text-muted small mb-4">
                         <span><i class="far fa-user me-1"></i>{{ post.author }}</span>
-                        <span><i class="far fa-calendar-alt me-1"></i>{{ post.created_at.strftime('%B %d, %Y') }}</span>
+                        <span><i class="far fa-calendar-alt me-1"></i>{{ post.created_at.strftime('%d-%m-%Y') }}</span>
                     </div>
 
                     {% if post.image %}
@@ -46,7 +46,7 @@
                                 <img src="{{ r.image or 'https://picsum.photos/seed/blog' ~ r.id ~ '/100/100' }}" class="rounded flex-shrink-0" width="70" height="70" style="object-fit:cover" alt="{{ r.title }}">
                                 <div>
                                     <h6 class="fw-semibold text-dark mb-1" style="font-size:0.85rem">{{ r.title[:50] ~ '...' if r.title|length > 50 else r.title }}</h6>
-                                    <small class="text-muted">{{ r.created_at.strftime('%b %d, %Y') }}</small>
+                                    <small class="text-muted">{{ r.created_at.strftime('%d-%m-%Y') }}</small>
                                 </div>
                             </a>
                             {% endfor %}

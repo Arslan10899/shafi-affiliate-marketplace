@@ -63,7 +63,7 @@
                     <td><a href="/admin/products/edit/{{ p.id }}" class="text-decoration-none">{{ p.title[:50] }}</a></td>
                     <td><span class="badge bg-light text-dark">{{ p.affiliate_platform|title }}</span></td>
                     <td>{% if p.price %}{% set pp = price_parts(p.price) %}<span class="price-amazon"><span class="price-currency">{{ p.currency or 'USD' }}</span><span class="price-whole">{{ pp.int }}</span><span class="price-decimal">.{{ pp.dec }}</span></span>{% else %}-{% endif %}</td>
-                    <td><small class="text-muted">{{ p.created_at.strftime('%Y-%m-%d') if p.created_at else '-' }}</small></td>
+                    <td><small class="text-muted">{{ p.created_at.strftime('%d-%m-%Y') if p.created_at else '-' }}</small></td>
                 </tr>
                 {% else %}
                 <tr><td colspan="4" class="text-center text-muted py-3">No products yet</td></tr>
