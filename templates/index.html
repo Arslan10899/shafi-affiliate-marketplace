@@ -72,23 +72,23 @@
         <h2 class="fw-bold mb-4 text-center"><i class="fas fa-layer-group me-2" style="background:linear-gradient(135deg,#f59e0b,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent"></i>Shop by Category</h2>
         <div class="row g-3 justify-content-center">
             {% set cats = [
-                {'fa': 'microchip', 'color': '#f59e0b', 'bg': '#fffbeb'},
-                {'fa': 'tshirt', 'color': '#3b82f6', 'bg': '#eff6ff'},
-                {'fa': 'couch', 'color': '#10b981', 'bg': '#ecfdf5'},
-                {'fa': 'spa', 'color': '#ec4899', 'bg': '#fdf2f8'},
-                {'fa': 'futbol', 'color': '#8b5cf6', 'bg': '#f5f3ff'},
-                {'fa': 'gamepad', 'color': '#f97316', 'bg': '#fff7ed'},
-                {'fa': 'book', 'color': '#14b8a6', 'bg': '#f0fdfa'},
-                {'fa': 'car', 'color': '#ef4444', 'bg': '#fef2f2'},
+                {'fa': 'microchip', 'color': '#d97706', 'bg': '#fef3c7'},
+                {'fa': 'tshirt', 'color': '#2563eb', 'bg': '#dbeafe'},
+                {'fa': 'couch', 'color': '#059669', 'bg': '#d1fae5'},
+                {'fa': 'spa', 'color': '#db2777', 'bg': '#fce7f3'},
+                {'fa': 'futbol', 'color': '#7c3aed', 'bg': '#ede9fe'},
+                {'fa': 'gamepad', 'color': '#ea580c', 'bg': '#ffedd5'},
+                {'fa': 'book', 'color': '#0d9488', 'bg': '#ccfbf1'},
+                {'fa': 'car', 'color': '#dc2626', 'bg': '#fee2e2'},
             ] %}
             {% for cat in categories %}
             {% set c = cats[loop.index0 % cats|length] %}
-            <div class="col-4 col-md-3 col-lg-2 mb-3">
+            <div class="col-4 col-md-3 col-lg mb-3">
                 <a href="/shop?category={{ cat.slug }}" class="text-decoration-none d-block">
                     <div class="category-circle mx-auto" style="background:{{ c.bg }};color:{{ c.color }}">
                         <i class="fas fa-{{ c.fa }} category-circle-icon"></i>
                     </div>
-                    <p class="fw-semibold text-center mt-2 mb-0" style="color:#1e293b;font-size:0.85rem">{{ cat.name }}</p>
+                    <p class="fw-semibold text-center mt-2 mb-0" style="color:#334155;font-size:0.82rem;line-height:1.3">{{ cat.name }}</p>
                 </a>
             </div>
             {% endfor %}
