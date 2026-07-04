@@ -50,29 +50,26 @@
 <!-- CATEGORIES -->
 <section class="py-5">
     <div class="container">
-        <h2 class="fw-bold text-center mb-4" style="color:#0f172a">Shop by Category</h2>
-        <div class="row g-3 justify-content-center">
-            {% set cats = [
-                {'fa': 'microchip', 'color': '#f59e0b', 'bg': '#fffbeb'},
-                {'fa': 'tshirt', 'color': '#3b82f6', 'bg': '#eff6ff'},
-                {'fa': 'couch', 'color': '#10b981', 'bg': '#ecfdf5'},
-                {'fa': 'spa', 'color': '#ec4899', 'bg': '#fdf2f8'},
-                {'fa': 'futbol', 'color': '#8b5cf6', 'bg': '#f5f3ff'},
-                {'fa': 'gamepad', 'color': '#f97316', 'bg': '#fff7ed'},
-                {'fa': 'book', 'color': '#14b8a6', 'bg': '#f0fdfa'},
-                {'fa': 'car', 'color': '#ef4444', 'bg': '#fef2f2'},
+        <h2 class="fw-bold text-center mb-5" style="color:#0f172a">Shop by Category</h2>
+        <div class="row g-4 justify-content-center">
+            {% set cat_colors = [
+                {'from': '#fef3c7', 'to': '#fde68a', 'tag': '#f59e0b'},
+                {'from': '#dbeafe', 'to': '#bfdbfe', 'tag': '#3b82f6'},
+                {'from': '#d1fae5', 'to': '#a7f3d0', 'tag': '#10b981'},
+                {'from': '#fce7f3', 'to': '#fbcfe8', 'tag': '#ec4899'},
+                {'from': '#ede9fe', 'to': '#ddd6fe', 'tag': '#8b5cf6'},
+                {'from': '#ffedd5', 'to': '#fed7aa', 'tag': '#f97316'},
             ] %}
             {% for cat in categories %}
-            {% set c = cats[loop.index0 % cats|length] %}
+            {% set cc = cat_colors[loop.index0 % cat_colors|length] %}
             <div class="col-6 col-md-4 col-lg-3 col-xl">
-                <a href="/shop?category={{ cat.slug }}" class="text-decoration-none">
-                    <div class="cat-card card border-0 h-100">
-                        <div class="card-body text-center py-4 px-3">
-                            <div class="cat-icon-wrap mx-auto" style="background:{{ c.bg }};color:{{ c.color }}">
-                                <i class="fas fa-{{ c.fa }} cat-icon"></i>
-                            </div>
-                            <h6 class="fw-semibold mt-3 mb-1" style="color:#1e293b">{{ cat.name }}</h6>
-                            <small class="text-muted">{{ cat.description or 'Explore collection' }}</small>
+                <a href="/shop?category={{ cat.slug }}" class="text-decoration-none d-block cat-card-link">
+                    <div class="cat-card" style="background:linear-gradient(135deg,{{ cc.from }},{{ cc.to }})">
+                        <div class="cat-img-pop">
+                            <img src="{{ cat.image or 'https://placehold.co/300x300/f5f5f5/333?text=' + cat.name }}" alt="{{ cat.name }}" loading="lazy">
+                        </div>
+                        <div class="cat-card-label">
+                            <span class="cat-name">{{ cat.name }}</span>
                         </div>
                     </div>
                 </a>

@@ -135,35 +135,59 @@ body {
     transition-duration: 1.5s !important;
 }
 
-/* ===== CATEGORY CARDS ===== */
+/* ===== CATEGORY CARDS (POP-OUT IMAGE) ===== */
+.cat-card-link {
+    perspective: 600px;
+}
 .cat-card {
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    transition: all 0.3s ease;
-    cursor: pointer;
+    border-radius: 20px;
+    padding: 20px 16px 16px;
+    text-align: center;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: visible;
 }
 .cat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 35px rgba(0,0,0,0.1);
 }
-.cat-icon-wrap {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    transition: transform 0.3s ease;
+.cat-img-pop {
+    margin-top: -52px;
+    margin-bottom: 8px;
 }
-.cat-card:hover .cat-icon-wrap {
-    transform: scale(1.1);
+.cat-img-pop img {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    border-radius: 16px;
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,0.1));
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(4px);
+    padding: 8px;
 }
-.cat-icon {
-    transition: transform 0.3s ease;
+.cat-card:hover .cat-img-pop img {
+    transform: translateY(-6px) scale(1.05);
+    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.15));
 }
-.cat-card:hover .cat-icon {
-    transform: rotate(-5deg);
+.cat-card-label {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-top: 6px;
+    transition: all 0.3s ease;
+}
+.cat-card:hover .cat-card-label {
+    background: rgba(255,255,255,0.95);
+}
+.cat-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #1e293b;
+    display: block;
+    letter-spacing: 0.2px;
 }
 
 /* ===== ADMIN SIDEBAR ===== */
